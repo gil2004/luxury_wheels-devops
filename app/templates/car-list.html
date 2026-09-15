@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<title>Luxury Wheels - Lista de Carros</title>
+<link href="{{ url_for('static', filename='images/favicon.jpg') }}" rel="shortcut icon" type="image/png"/>
+<link href="{{ url_for('static', filename='css/fontawesome.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/lightcase.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/nice-select.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/datepicker.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/wickedpicker.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/jquery-ui.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/owl.carousel.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
+<style>
+.car-search-section { padding-top: 40px !important; }
+.car-item .car-img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px 4px 0 0; }
+.cmn-btn { height: 50px; padding: 0 25px; border-radius: 8px; border: none; }
+</style>
+</head>
+<body>
+<header class="header-section header-section--style2">
+<div class="header-bottom">
+<div class="container">
+<nav class="navbar navbar-expand-lg p-0">
+<a class="site-logo site-title" href="{{ url_for('home') }}">
+<img alt="site-logo" src="{{ url_for('static', filename='images/logo2.png') }}"/>
+<span class="logo-icon"><i class="flaticon-fire"></i></span>
+</a>
+<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+<span class="menu-toggle"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav main-menu m-auto">
+<li><a href="{{ url_for('home') }}">Início</a></li>
+<li><a href="{{ url_for('carros') }}">Carros</a></li>
+<li><a href="{{ url_for('reservas') }}">As minhas reservas</a></li>
+<li><a href="{{ url_for('contacto') }}">Contacte-nos</a></li>
+{% if session['id_cliente'] %}
+<li><a href="/logout">Logout ({{ session['nome'] }})</a></li>
+{% else %}
+<li><a href="{{ url_for('login') }}">Iniciar sessão</a></li>
+<li><a href="{{ url_for('registar') }}">Registar-se</a></li>
+{% endif %}
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</header>
+
+<section class="inner-page-banner bg_img overlay-3" data-background="{{ url_for('static', filename='images/inner-page-bg.jpg') }}">
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<h2 class="page-title">Lista de Carros</h2>
+<ol class="page-list">
+<li><a href="{{ url_for('home') }}"><i class="fa fa-home"></i> Início</a></li>
+<li>Lista de Carros</li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+
+<section class="car-search-section pt-120 pb-120">
+<div class="container">
+<form action="/carros" method="GET" class="mb-4">
+<div class="row align-items-end">
+<div class="col-lg-3 col-md-6 mb-3">
+<label>Ordenar por preço</label>
+<select name="ordenar" class="form-control" onchange="this.form.submit()">
+<option value="preco_asc" {% if request.args.get('ordenar') == 'preco_asc' %}selected{% endif %}>Preço Crescente</option>
+<option value="preco_desc" {% if request.args.get('ordenar') == 'preco_desc' %}selected{% endif %}>Preço Decrescente</option>
+</select>
+</div>
+<div class="col-lg-2 col-md-6 mb-3">
+<label>Tipo</label>
+<select name="tipo" class="form-control" onchange="this.form.submit()">
+<option value="">Todos os Tipos</option>
+<option value="Luxo" {% if request.args.get('tipo') == 'Luxo' %}selected{% endif %}>Luxo</option>
+<option value="SUV" {% if request.args.get('tipo') == 'SUV' %}selected{% endif %}>SUV</option>
+<option value="Desportivo" {% if request.args.get('tipo') == 'Desportivo' %}selected{% endif %}>Desportivo</option>
+</select>
+</div>
+<div class="col-lg-2 col-md-6 mb-3">
+<label>Lotação</label>
+<select name="lotacao" class="form-control" onchange="this.form.submit()">
+<option value="">Todas</option>
+<option value="2" {% if request.args.get('lotacao') == '2' %}selected{% endif %}>2 lugares</option>
+<option value="4" {% if request.args.get('lotacao') == '4' %}selected{% endif %}>4 lugares</option>
+<option value="5" {% if request.args.get('lotacao') == '5' %}selected{% endif %}>5 lugares</option>
+<option value="7" {% if request.args.get('lotacao') == '7' %}selected{% endif %}>7 lugares</option>
+</select>
+</div>
+<div class="col-lg-2 col-md-6 mb-3">
+<label>Preço máximo</label>
+<select name="preco_max" class="form-control" onchange="this.form.submit()">
+<option value="">Todos</option>
+<option value="300" {% if request.args.get('preco_max') == '300' %}selected{% endif %}>Até 300€</option>
+<option value="400" {% if request.args.get('preco_max') == '400' %}selected{% endif %}>Até 400€</option>
+<option value="500" {% if request.args.get('preco_max') == '500' %}selected{% endif %}>Até 500€</option>
+</select>
+</div>
+<div class="col-lg-3 col-md-6 mb-3 d-flex align-items-end">
+<input name="pesquisa" class="form-control" placeholder="Pesquisar..." type="text" value="{{ request.args.get('pesquisa', '') }}"/>
+<button class="cmn-btn ml-2" type="submit">Ir</button>
+</div>
+</div>
+</form>
+
+<div class="row">
+{% for veiculo in veiculos %}
+<div class="col-md-4 col-12 mb-4">
+<div class="car-item">
+<img class="car-img" src="{{ url_for('static', filename='images/carros1/' + veiculo[6]) }}" alt="{{ veiculo[1] }} {{ veiculo[2] }}"/>
+<div class="car-item-body">
+<div class="content">
+<h4 class="title">{{ veiculo[1] }} {{ veiculo[2] }}</h4>
+<span class="price">{{ veiculo[5] }}€ por dia</span>
+<p>{{ veiculo[3] }} — {{ veiculo[4] }} lugares</p>
+<button class="cmn-btn" data-toggle="modal" data-target="#modalReserva"
+    data-id="{{ veiculo[0] }}"
+    data-nome="{{ veiculo[1] }} {{ veiculo[2] }}"
+    data-preco="{{ veiculo[5] }}">
+    Alugar Carro
+</button>
+</div>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+</div>
+</section>
+
+<!-- MODAL DE RESERVA -->
+<div class="modal fade" id="modalReserva" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title">Reservar <span id="modalNomeCarro"></span></h5>
+<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+</div>
+<form action="" method="POST" id="formReserva">
+<div class="modal-body">
+<div class="form-group">
+<label>Data de Início</label>
+<input type="date" name="data_inicio" class="form-control" required/>
+</div>
+<div class="form-group">
+<label>Data de Fim</label>
+<input type="date" name="data_fim" class="form-control" required/>
+</div>
+<div class="form-group">
+<label>Forma de Pagamento</label>
+<select name="forma_pagamento" class="form-control" required>
+<option value="">Selecionar...</option>
+{% for forma in formas_pagamento %}
+<option value="{{ forma[1] }}">{{ forma[1] }}</option>
+{% endfor %}
+</select>
+</div>
+<p class="mt-2">Preço: <strong><span id="modalPreco"></span>€ por dia</strong></p>
+<p id="totalReserva" class="text-success mt-2"><strong></strong></p>
+<div id="datasIndisponiveis"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+<button type="submit" class="cmn-btn">Confirmar Reserva</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+<footer class="footer-section">
+<div class="footer-top pt-120 pb-120">
+<div class="container">
+<div class="row">
+<div class="col-lg-4 col-sm-8">
+<div class="footer-widget widget-about">
+<div class="widget-about-content">
+<a class="footer-logo" href="{{ url_for('home') }}">
+<img alt="logo" src="{{ url_for('static', filename='images/logo-footer.png') }}"/>
+</a>
+<p>A Luxury Wheels oferece uma frota premium de veículos para aluguer em Lisboa. Qualidade, conforto e segurança em cada viagem.</p>
+</div>
+</div>
+</div>
+<div class="col-lg-4 col-sm-8">
+<div class="footer-widget widget-address">
+<h4 class="widget-title">Contacte-nos</h4>
+<ul>
+<li><i class="fa fa-map-marker"></i><span>Lisboa, Portugal</span></li>
+<li><i class="fa fa-envelope"></i><span>geral@luxurywheels.pt</span></li>
+<li><i class="fa fa-phone-square"></i><span>+351 210 000 000</span></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lightcase.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker.en.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wickedpicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+$(document).ready(function() {
+    $('form select').niceSelect('destroy');
+});
+
+var datasIndisponiveis = {{ datas_indisponiveis | safe }};
+var precodia = 0;
+
+$('#modalReserva').on('show.bs.modal', function(event) {
+    var btn = $(event.relatedTarget);
+    var id = btn.data('id');
+    var nome = btn.data('nome');
+    precodia = parseFloat(btn.data('preco'));
+    $('#modalNomeCarro').text(nome);
+    $('#modalPreco').text(precodia);
+    $('#formReserva').attr('action', '/reserva/' + id);
+    $('#totalReserva').text('');
+
+    var datas = datasIndisponiveis[id] || [];
+    var texto = '';
+    if (datas.length > 0) {
+        texto = '<p class="text-danger mt-2"><strong>Datas indisponíveis:</strong><br>';
+        datas.forEach(function(d) {
+            texto += d.inicio + ' até ' + d.fim + '<br>';
+        });
+        texto += '</p>';
+    }
+    $('#datasIndisponiveis').html(texto);
+});
+
+$('#formReserva input[name="data_inicio"], #formReserva input[name="data_fim"]').on('change', function() {
+    var inicio = $('#formReserva input[name="data_inicio"]').val();
+    var fim = $('#formReserva input[name="data_fim"]').val();
+    if (inicio && fim) {
+        var d1 = new Date(inicio);
+        var d2 = new Date(fim);
+        var dias = (d2 - d1) / (1000 * 60 * 60 * 24);
+        if (dias > 0) {
+            $('#totalReserva').html('<strong>Total: ' + (dias * precodia).toFixed(2) + '€ (' + dias + ' dias)</strong>');
+        } else {
+            $('#totalReserva').html('<span class="text-danger">Datas inválidas!</span>');
+        }
+    }
+});
+</script>
+</body>
+</html>

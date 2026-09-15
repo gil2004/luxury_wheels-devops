@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<title>Luxury Wheels - Início</title>
+<link href="{{ url_for('static', filename='images/favicon.jpg') }}" rel="shortcut icon" type="image/png"/>
+<link href="{{ url_for('static', filename='css/fontawesome.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/lightcase.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/nice-select.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/datepicker.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/wickedpicker.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/jquery-ui.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/owl.carousel.min.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
+<style>
+.car-item .car-img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px 4px 0 0; }
+</style>
+</head>
+<body>
+<header class="header-section header-section--style2">
+<div class="header-bottom">
+<div class="container">
+<nav class="navbar navbar-expand-lg p-0">
+<a class="site-logo site-title" href="{{ url_for('home') }}">
+  <img alt="site-logo" src="{{ url_for('static', filename='images/logo2.png') }}"/>
+  <span class="logo-icon"><i class="flaticon-fire"></i></span>
+</a>
+<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+<span class="menu-toggle"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav main-menu m-auto">
+<li><a href="{{ url_for('home') }}">Início</a></li>
+<li><a href="{{ url_for('carros') }}">Carros</a></li>
+<li><a href="{{ url_for('reservas') }}">As minhas reservas</a></li>
+<li><a href="{{ url_for('contacto') }}">Contacte-nos</a></li>
+{% if session['id_cliente'] %}
+    <li><a href="/logout">Logout ({{ session['nome'] }})</a></li>
+{% else %}
+    <li><a href="{{ url_for('login') }}">Iniciar sessão</a></li>
+    <li><a href="{{ url_for('registar') }}">Registar-se</a></li>
+{% endif %}
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</header>
+
+<section class="banner-section banner-section--style2 bg_img" data-background="{{ url_for('static', filename='images/banner.jpg') }}">
+<div class="banner-el-img"><img alt="image" src="{{ url_for('static', filename='images/elements/banner-man.png') }}"/></div>
+<div class="container">
+<div class="row align-items-center">
+<div class="col-lg-12">
+<div class="banner-content text-center">
+<h1 class="title">Encontre o Seu Carro Ideal</h1>
+<p>Na Luxury Wheels, oferecemos uma frota premium de veículos para todas as ocasiões. Desde SUVs a automóveis de luxo, temos o carro perfeito para si. Reserve online de forma simples e rápida.</p>
+<a class="cmn-btn" href="{{ url_for('carros') }}">Ver Todos os Veículos</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="counter-section bg_img overlay-main" data-background="{{ url_for('static', filename='images/bg1.jpg') }}">
+<div class="container">
+<div class="row mb-none-30">
+<div class="col-lg-3 col-sm-6">
+<div class="counter-item counter-item--style2">
+<div class="icon"><i class="fa fa-car"></i></div>
+<div class="content">
+<span class="counter">15</span>
+<span class="title">Veículos Disponíveis</span>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6">
+<div class="counter-item counter-item--style2">
+<div class="icon"><i class="fa fa-smile-o"></i></div>
+<div class="content">
+<span class="counter">1200</span>
+<span class="title">Clientes Satisfeitos</span>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6">
+<div class="counter-item counter-item--style2">
+<div class="icon"><i class="fa fa-map-marker"></i></div>
+<div class="content">
+<span class="counter">5</span>
+<span class="title">Locais de Entrega</span>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6">
+<div class="counter-item counter-item--style2">
+<div class="icon"><i class="fa fa-trophy"></i></div>
+<div class="content">
+<span class="counter">8</span>
+<span class="title">Anos de Experiência</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<section class="choose-car-section pt-120 pb-120">
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-lg-6">
+<div class="section-header text-center">
+<h2 class="section-title">Os Nossos Veículos em Destaque</h2>
+<p>Escolha entre a nossa seleção de veículos premium, todos revistos e prontos a partir.</p>
+</div>
+</div>
+</div>
+<div class="row mb-none-30">
+{% for veiculo in veiculos %}
+<div class="col-lg-4 col-md-6 mb-4">
+<div class="car-item car-item--style2">
+<img class="car-img" src="{{ url_for('static', filename='images/carros1/' + veiculo[6]) }}" alt="{{ veiculo[1] }} {{ veiculo[2] }}"/>
+<div class="car-item-body">
+<div class="content">
+<h4 class="title">{{ veiculo[1] }} {{ veiculo[2] }}</h4>
+<span class="price">{{ veiculo[5] }}€ por dia</span>
+<p>{{ veiculo[3] }} — {{ veiculo[4] }} lugares</p>
+<a class="cmn-btn" href="{{ url_for('carros') }}">Alugar Carro</a>
+</div>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+<div class="text-center mt-4">
+<a class="cmn-btn" href="{{ url_for('carros') }}">Ver Todos os Veículos</a>
+</div>
+</div>
+</section>
+
+<footer class="footer-section">
+<div class="footer-top pt-120 pb-120">
+<div class="container">
+<div class="row">
+<div class="col-lg-4 col-sm-8">
+<div class="footer-widget widget-about">
+<div class="widget-about-content">
+<a class="footer-logo" href="{{ url_for('home') }}">
+  <img alt="logo" src="{{ url_for('static', filename='images/logo-footer.png') }}"/>
+</a>
+<p>A Luxury Wheels oferece uma frota premium de veículos para aluguer em Lisboa. Qualidade, conforto e segurança em cada viagem.</p>
+</div>
+</div>
+</div>
+<div class="col-lg-4 col-sm-8">
+<div class="footer-widget widget-address">
+<h4 class="widget-title">Contacte-nos</h4>
+<ul>
+<li><i class="fa fa-map-marker"></i><span>Lisboa, Portugal</span></li>
+<li><i class="fa fa-envelope"></i><span>geral@luxurywheels.pt</span></li>
+<li><i class="fa fa-phone-square"></i><span>+351 210 000 000</span></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lightcase.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker.en.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wickedpicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
