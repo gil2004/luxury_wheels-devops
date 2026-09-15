@@ -292,6 +292,19 @@ def logout():
     session.clear()
     return redirect('/')
 
+@app.route('/health')
+def health():
+    return "ok", 200
+
+@app.route('/ready')
+def ready():
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("SELECT 1 FROM veiculos LIMIT 1")
+        conn.close()
+        return "ready", 200
+    except Exception:
+        return "not ready", 503
 
 if __name__ == '__main__':
     app.run(debug=True)
