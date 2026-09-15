@@ -3,6 +3,9 @@ import sqlite3
 import os
 from datetime import datetime, date, timedelta
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 DB_PATH = os.environ["DATABASE_PATH"]
