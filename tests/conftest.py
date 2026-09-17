@@ -14,10 +14,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "app"))
 
 @pytest.fixture(scope="session", autouse=True)
 def base_de_dados():
-    schema = os.path.join(os.path.dirname(__file__), "..", "schema.sql")
+    pasta = os.path.join(os.path.dirname(__file__), "..")
     conn = sqlite3.connect(_db_path)
-    with open(schema) as f:
-        conn.executescript(f.read())
+    for ficheiro in ("schema.sql", "seed.sql"):
+        with open(os.path.join(pasta, ficheiro),) as f:
+            conn.executescript(f.read())
     conn.commit()
     conn.close()
     yield
