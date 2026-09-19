@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 import os
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta 
 import json
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv()
 
@@ -28,11 +29,11 @@ def login():
 
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM clientes WHERE email = ? AND password = ?", (email, password))
+        cursor.execute("SELECT * FROM clientes WHERE email = ?", (email,))
         cliente = cursor.fetchone()
         conn.close()
 
-        if cliente:
+        if cliente and check_password_hash(cliente[3], password):
             session['id_cliente'] = cliente[0]
             session['nome'] = cliente[1]
             return redirect("/")
@@ -127,7 +128,7 @@ def registar():
             return "Email já registrado!"
 
         cursor.execute(
-            "INSERT INTO clientes (nome, email, password) VALUES (?, ?, ?)", (nome, email, password)
+            "INSERT INTO clientes (nome, email, password) VALUES (?, ?, ?)", (nome, email, generate_password_hash(password))
         )
         conn.commit()
         session['id_cliente'] = cursor.lastrowid
