@@ -1,0 +1,14 @@
+.git
+.gitignore
+venv/
+*.pyc
+.pytest_cache/
+.env
+.env.example
+requirements-dev.txt
+tests/
+docs/
+README.md
+**/*.db
+**/*.sqbpro
+**/__pycache__
